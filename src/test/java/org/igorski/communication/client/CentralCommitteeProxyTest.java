@@ -35,14 +35,13 @@ class CentralCommitteeProxyTest {
 
     @BeforeEach
     public void beforeEachTest() {
+        when(sessionStarted.getSessionId()).thenReturn(SESSION_ID);
+        when(eventDispatcher.sessionStarted(any(SessionStarted.class))).thenReturn(sessionStarted);
         centralCommitteeProxy = new CentralCommitteeProxy(eventDispatcher);
     }
 
     @Test
     public void shouldDispatchTestPlanStartedEvents() {
-        when(sessionStarted.getSessionId()).thenReturn(SESSION_ID);
-        when(eventDispatcher.sessionStarted(any(SessionStarted.class))).thenReturn(sessionStarted);
-
         HashSet<String> uniqueIds = new HashSet<>();
         uniqueIds.add("id1");
         uniqueIds.add("id2");

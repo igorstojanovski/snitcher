@@ -25,23 +25,39 @@ public class CentralCommitteeProxy {
     private long sessionId;
 
     public CentralCommitteeProxy() {
-        ResteasyClient client = new ResteasyClientBuilder().build();
-        ResteasyWebTarget webTarget = client.target(UriBuilder.fromPath(ENDPOINT));
-        eventDispatcher = webTarget.proxy(EventDispatcher.class);
-        sessionId = eventDispatcher.sessionStarted(new SessionStarted()).getSessionId();
+
+        this(getEventDispatcher());
     }
 
     CentralCommitteeProxy(EventDispatcher eventDispatcher) {
         this.eventDispatcher = eventDispatcher;
+        startSession();
+    }
+
+    private static EventDispatcher getEventDispatcher() {
+
+        EventDispatcher eventDispatcher;
+        ResteasyClient client = new ResteasyClientBuilder().build();
+        ResteasyWebTarget webTarget = client.target(UriBuilder.fromPath(ENDPOINT));
+        eventDispatcher = webTarget.proxy(EventDispatcher.class);
+        return eventDispatcher;
+    }
+
+    private void startSession() {
+
+        SessionStarted sessionStarted = eventDispatcher.sessionStarted(new SessionStarted());
+        sessionId = sessionStarted.getSessionId();
     }
 
     public void testPlanExecutionStarted(Set<String> uniqueIds) {
-        for(String uniqueId : uniqueIds) {
+
+        for (String uniqueId : uniqueIds) {
             eventDispatcher.testRegistered(new TestRegistered(System.currentTimeMillis(), uniqueId, sessionId));
         }
     }
 
     public void testPlanExecutionFinished(TestPlan testPlan) {
+
         eventDispatcher.sessionFinished(new SessionFinished(System.currentTimeMillis(), sessionId));
     }
 
@@ -50,19 +66,20 @@ public class CentralCommitteeProxy {
     }
 
     public void executionSkipped(String uniqueId, String reason) {
-        ExecutionSkipped executionSkipped = new ExecutionSkipped(System.currentTimeMillis(), uniqueId,
-                sessionId, reason);
+
+        ExecutionSkipped executionSkipped = new ExecutionSkipped(System.currentTimeMillis(), uniqueId, sessionId, reason);
         eventDispatcher.executionSkipped(executionSkipped);
     }
 
     public void executionStarted(String uniqueId) {
+
         TestStarted testStarted = new TestStarted(System.currentTimeMillis(), uniqueId, sessionId);
         eventDispatcher.testStarted(testStarted);
     }
 
     public void executionFinished(TestExecutionResult testExecutionResult, String uniqueId) {
-        TestFinished testFinished = new TestFinished(System.currentTimeMillis(), uniqueId,
-                sessionId, testExecutionResult.getStatus().toString());
+
+        TestFinished testFinished = new TestFinished(System.currentTimeMillis(), uniqueId, sessionId, testExecutionResult.getStatus().toString());
         eventDispatcher.testFinished(testFinished);
     }
 
