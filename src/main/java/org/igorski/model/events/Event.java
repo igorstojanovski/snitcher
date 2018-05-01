@@ -10,6 +10,4 @@ import lombok.Setter;
 public class Event {
     protected long id;
     protected long time;
-    protected String projectName;
-    protected String user;
 }

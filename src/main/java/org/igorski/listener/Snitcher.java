@@ -28,11 +28,11 @@ public class Snitcher implements TestExecutionListener {
     }
 
     public void testPlanExecutionFinished(TestPlan testPlan) {
-        centralCommitteeProxy.testPlanExecutionFinished(testPlan);
+        centralCommitteeProxy.testPlanExecutionFinished();
     }
 
     public void dynamicTestRegistered(TestIdentifier testIdentifier) {
-        centralCommitteeProxy.dynamicTestRegistered(testIdentifier);
+
     }
 
     public void executionSkipped(TestIdentifier testIdentifier, String reason) {
@@ -44,11 +44,11 @@ public class Snitcher implements TestExecutionListener {
     }
 
     public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-        centralCommitteeProxy.executionFinished(testExecutionResult, testIdentifier.getUniqueId());
+        centralCommitteeProxy.executionFinished(testExecutionResult.getStatus(), testIdentifier.getUniqueId());
     }
 
     public void reportingEntryPublished(TestIdentifier testIdentifier, ReportEntry entry) {
-        centralCommitteeProxy.reportingEntryPublished(testIdentifier, entry);
+
     }
 
     public Set<String> getUniqueIds(TestPlan testPlan) {
