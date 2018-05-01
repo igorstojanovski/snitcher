@@ -12,47 +12,56 @@ import org.igorski.model.events.TestStarted;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/api/events")
 public interface EventDispatcher {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/session/started")
     SessionStarted sessionStarted(SessionStarted sessionStarted);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/session/finished")
     SessionFinished sessionFinished(SessionFinished sessionFinished);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/test/started")
     TestStarted testStarted(TestStarted testStarted);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/test/finished")
     TestFinished testFinished(TestFinished testFinished);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/session/started")
     ReportingEntryPublished reportingEntryPublished(ReportingEntryPublished reportingEntryPublished);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/test/dynamic")
     DynamicTestRegistered dynamicTestRegistered(DynamicTestRegistered dynamicTestRegistered);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/test/skipped")
     ExecutionSkipped executionSkipped(ExecutionSkipped executionSkipped);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/session/registered")
     TestRegistered testRegistered(TestRegistered testRegistered);
 }

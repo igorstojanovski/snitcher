@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 
 public class WiremockExtension implements BeforeAllCallback, AfterEachCallback, AfterAllCallback, ParameterResolver {
 
@@ -24,7 +24,7 @@ public class WiremockExtension implements BeforeAllCallback, AfterEachCallback, 
     }
 
     public void beforeAll(ExtensionContext extensionContext) {
-        wireMockServer = new WireMockServer(wireMockConfig().port(8282));
+        wireMockServer = new WireMockServer(options().port(8080));
         wireMockServer.start();
     }
 
