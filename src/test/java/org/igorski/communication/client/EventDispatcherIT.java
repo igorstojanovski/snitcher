@@ -37,7 +37,7 @@ class EventDispatcherIT {
         ResteasyClient client = new ResteasyClientBuilder().build();
         client.register((ClientRequestFilter) clientRequestContext -> System.out.println(clientRequestContext.getUri()));
         ResteasyWebTarget webTarget = client.target(UriBuilder.fromPath("http://localhost:8080"));
-        eventDispatcher = webTarget.proxy(EventDispatcher.class);
+        eventDispatcher = webTarget.proxy(WebServerEventDispatcher.class);
     }
 
     @Test

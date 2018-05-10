@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.igorski.SnitcherProperties;
 
+/**
+ * Event that marks a session as started. This object contains the session ID.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

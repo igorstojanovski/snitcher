@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Event that marks a session as finished.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

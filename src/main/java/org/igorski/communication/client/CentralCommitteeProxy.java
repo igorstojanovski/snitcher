@@ -15,12 +15,20 @@ import org.junit.platform.engine.TestExecutionResult;
 import javax.ws.rs.core.UriBuilder;
 import java.util.Set;
 
+/**
+ * The Central Committee acts as a proxy to the third party service that handles the events.
+ * Uses an {@link EventDispatcher} to do the actual sending of the events.
+ *
+ */
 public class CentralCommitteeProxy {
 
     private static final String ENDPOINT = SnitcherProperties.getValue("central.committee.endpoint");
     private final EventDispatcher eventDispatcher;
     private long sessionId;
 
+    /**
+     * By default it creates and sets a {@link WebServerEventDispatcher} to handle the event sending.
+     */
     public CentralCommitteeProxy() {
         this(getEventDispatcher());
     }
@@ -34,7 +42,7 @@ public class CentralCommitteeProxy {
         EventDispatcher eventDispatcher;
         ResteasyClient client = new ResteasyClientBuilder().build();
         ResteasyWebTarget webTarget = client.target(UriBuilder.fromPath(ENDPOINT));
-        eventDispatcher = webTarget.proxy(EventDispatcher.class);
+        eventDispatcher = webTarget.proxy(WebServerEventDispatcher.class);
         return eventDispatcher;
     }
 
@@ -43,28 +51,50 @@ public class CentralCommitteeProxy {
         sessionId = sessionStarted.getSessionId();
     }
 
-    public void testPlanExecutionStarted(Set<String> uniqueIds) {
-        for (String uniqueId : uniqueIds) {
+    /**
+     * Marks that the test plan execution has started by registering all the different test IDs
+     * @param uniqueTestIds IDs of all the tests that are part of the test plan
+     */
+    public void testPlanExecutionStarted(Set<String> uniqueTestIds) {
+        for (String uniqueId : uniqueTestIds) {
             eventDispatcher.testRegistered(new TestRegistered(System.currentTimeMillis(), uniqueId, sessionId));
         }
     }
 
+    /**
+     * Sends a {@link SessionFinished} event.
+     */
     public void testPlanExecutionFinished() {
         eventDispatcher.sessionFinished(new SessionFinished(System.currentTimeMillis(), sessionId));
     }
 
-    public void executionSkipped(String uniqueId, String reason) {
-        ExecutionSkipped executionSkipped = new ExecutionSkipped(System.currentTimeMillis(), uniqueId, sessionId, reason);
+    /**
+     * Creates and sends an {@link ExecutionSkipped} event. Sets the test if the ID and the reason why it was skipped.
+     *
+     * @param uniqueTestId test ID
+     * @param reason why the test is skipped
+     */
+    public void executionSkipped(String uniqueTestId, String reason) {
+        ExecutionSkipped executionSkipped = new ExecutionSkipped(System.currentTimeMillis(), uniqueTestId, sessionId, reason);
         eventDispatcher.executionSkipped(executionSkipped);
     }
 
-    public void executionStarted(String uniqueId) {
-        TestStarted testStarted = new TestStarted(System.currentTimeMillis(), uniqueId, sessionId);
+    /**
+     * Sends a {@link TestStarted} event.
+     * @param uniqueTestId id of the started test
+     */
+    public void executionStarted(String uniqueTestId) {
+        TestStarted testStarted = new TestStarted(System.currentTimeMillis(), uniqueTestId, sessionId);
         eventDispatcher.testStarted(testStarted);
     }
 
-    public void executionFinished(TestExecutionResult.Status testExecutionStatus, String uniqueId) {
-        TestFinished testFinished = new TestFinished(System.currentTimeMillis(), uniqueId, sessionId,
+    /**
+     * Sends an {@link TestFinished} event.
+     * @param testExecutionStatus the status of the test execution
+     * @param uniqueTestId the ID of the test
+     */
+    public void executionFinished(TestExecutionResult.Status testExecutionStatus, String uniqueTestId) {
+        TestFinished testFinished = new TestFinished(System.currentTimeMillis(), uniqueTestId, sessionId,
                 testExecutionStatus.toString());
         eventDispatcher.testFinished(testFinished);
     }

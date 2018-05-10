@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Execution that marks a test as skipped. The even has to contain the the test ID and the reason why the test was
+ * skipped.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

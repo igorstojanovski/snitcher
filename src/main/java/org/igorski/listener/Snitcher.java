@@ -10,8 +10,13 @@ import org.junit.platform.launcher.TestPlan;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Snitcher is used to snitch on your unit tests. It has methods that create and send events that mark different
+ * points in the execution of a test plan.
+ *
+ *
+ */
 public class Snitcher implements TestExecutionListener {
-
 
     private final CentralCommitteeProxy centralCommitteeProxy;
 

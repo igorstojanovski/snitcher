@@ -1,10 +1,12 @@
 package org.igorski;
 
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Utility class that reads properties from the snitcher.properties file in the resource folder.
+ */
 public class SnitcherProperties {
 
     private static Properties properties;
@@ -20,8 +22,6 @@ public class SnitcherProperties {
         properties = new Properties();
         try {
             properties.load(ClassLoader.getSystemClassLoader().getResourceAsStream("snitcher.properties"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

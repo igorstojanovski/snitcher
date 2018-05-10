@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Event that marks a test as finished. It must contain the outcome of the test execution.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
